@@ -12,29 +12,16 @@ export default class TaskList extends React.Component {
             tasks: []
         }
 
-
-        this.handleClick = this.handleClick.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount = () => {
         firebaseAuth.onAuthStateChanged(userAuth => {
-            this.handleClick(null);
+            firebaseService.registerDBRealTime('users', (dataReceived) => {
+                let tasks = dataReceived;
+                this.setState({tasks: tasks.taskList});
+            });
         });
     };
-
-    handleChange(e) {
-        const {name, value} = e.target;
-        this.setState({[name]: value});
-    }
-
-    handleClick(e) {
-        firebaseService.registerDBRealTime('users', (dataReceived) => {
-            let tasks = dataReceived;
-            console.log(1, tasks);
-            this.setState({tasks: tasks.taskList});
-        });
-    }
 
     renderRow(row) {
         return (

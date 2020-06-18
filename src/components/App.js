@@ -1,17 +1,10 @@
-import React  from "react";
+import React from "react";
+import Routes from "../routes";
 
-import Login from './Login'
-import TaskList from './TaskList'
+const App = () => (
+    <div>
+        <Routes/>
+    </div>
+);
 
-export default class App extends React.Component {
-    render() {
-        return (
-            <div>
-                <h1>Hello Word</h1>
-                <Login/>
-                <TaskList />
-            </div>
-        );
-    }
-
-}
+export default App;

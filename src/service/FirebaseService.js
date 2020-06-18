@@ -2,15 +2,18 @@ import {firebaseDatabase} from '../config/firebaseConfig'
 import {firebaseAuth} from '../config/firebaseConfig'
 
 export default class FirebaseService {
-    static isLogged = () => firebaseAuth.currentUser != null
 
+    static isAuthenticated = () => firebaseAuth.currentUser != null
+    static logout = () => {
+        firebaseAuth.signOut();
+    }
     static loginFirebase = (username, password, callBack) => {
         firebaseAuth.signInWithEmailAndPassword(username, password)
             .then(value => callBack(null, value))
             .catch( error => callBack(error));
     };
     static registerDBRealTime = (nodePath, callback, size = 10) => {
-        if(!this.isLogged()){ return console.log("Usuário não logado")}
+        if(!this.isAuthenticated()){ return console.log("Usuário não logado")}
         let query = this.makeQuery(nodePath, size);
         query.on('value', dataSnapshot => {
             callback(dataSnapshot.val());
@@ -18,7 +21,7 @@ export default class FirebaseService {
     };
 
     static getDataInDB = (nodePath, callback, size = 10) => {
-        if(!this.isLogged()){ return console.log("Usuário não logado")}
+        if(!this.isAuthenticated()){ return console.log("Usuário não logado")}
         let query = this.makeQuery(nodePath, size);
         query.once('value').then(dataSnapshot => {
             callback(dataSnapshot.val());

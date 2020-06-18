@@ -15,8 +15,13 @@ export default class Login extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.logout = this.logout.bind(this);
     }
 
+
+    logout(e) {
+        firebaseService.logout();
+    }
     handleChange(e) {
         const {name, value} = e.target;
         this.setState({[name]: value});
@@ -69,6 +74,7 @@ export default class Login extends React.Component {
                         }
                     </div>
                 </form>
+                <button className="btn btn-primary" onClick={this.logout}>Logout</button>
             </div>
         );
     }
