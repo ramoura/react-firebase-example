@@ -2,25 +2,33 @@ import {firebaseDatabase} from '../config/firebaseConfig'
 import {firebaseAuth} from '../config/firebaseConfig'
 
 export default class FirebaseService {
+    static isLogged = () => firebaseAuth.currentUser != null
+
     static loginFirebase = (username, password, callBack) => {
         firebaseAuth.signInWithEmailAndPassword(username, password)
             .then(value => callBack(null, value))
             .catch( error => callBack(error));
     };
-    static getDataList = (nodePath, callback, size = 10) => {
-        let query = firebaseDatabase.ref(nodePath)
-            .limitToLast(size);
+    static registerDBRealTime = (nodePath, callback, size = 10) => {
+        if(!this.isLogged()){ return console.log("Usuário não logado")}
+        let query = this.makeQuery(nodePath, size);
         query.on('value', dataSnapshot => {
-            console.log(dataSnapshot)
-            let items = [];
-            dataSnapshot.forEach(childSnapshot => {
-                let item = childSnapshot.val();
-                items.push(item);
-            });
-            callback(items);
+            callback(dataSnapshot.val());
         });
-
-        return query;
     };
 
+    static getDataInDB = (nodePath, callback, size = 10) => {
+        if(!this.isLogged()){ return console.log("Usuário não logado")}
+        let query = this.makeQuery(nodePath, size);
+        query.once('value').then(dataSnapshot => {
+            callback(dataSnapshot.val());
+        });
+    };
+
+    static makeQuery(nodePath, size) {
+        let email = firebaseAuth.currentUser.email.replace(/[^a-zA-Z0-9 ]/g, "");
+        let query = firebaseDatabase.ref(nodePath + '/' + email)
+            .limitToLast(size);
+        return query;
+    }
 }
