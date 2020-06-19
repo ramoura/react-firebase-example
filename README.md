@@ -4,6 +4,13 @@ Um aplicativo classico para lista de tarefas (To-Do).
 
 ## User Stories
 
+### Sign in
+-   [ ] Feedback animação ao fazer login.
+-   [ ] Mensagem de Usuario ou Senha invalido.
+-   [ ] Redirecionar para a lista de tarefas após logar.
+-   [ ] O usuário pode fazer logout.
+
+### Task
 -   [ ] O usuário pode ver um campo 'input' onde pode digitar um item de tarefa.
 -   [ ] Pressionando enter (ou um botão), o usuário pode enviar o item de tarefa e pode ver que está sendo adicionado a uma lista de tarefas.
 -   [ ] O usuário pode marcar uma tarefa como concluída.
@@ -19,4 +26,5 @@ Um aplicativo classico para lista de tarefas (To-Do).
 ## Tecnologias utilizadas.
 
 -   ReactJS.
+-   MaterialUI
 -   Firebase (Autorização e Banco de dados).

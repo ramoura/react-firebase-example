@@ -7,6 +7,7 @@ export default class FirebaseService {
     static logout = () => {
         firebaseAuth.signOut();
     }
+
     static loginFirebase = (username, password, callBack) => {
         firebaseAuth.signInWithEmailAndPassword(username, password)
             .then(value => callBack(null, value))
