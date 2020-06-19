@@ -8,7 +8,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
-import CommentIcon from '@material-ui/icons/Comment';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import {firebaseAuth} from '../config/firebaseConfig'
 import firebaseService from '../service/FirebaseService'
@@ -49,6 +49,7 @@ class TaskList extends React.Component {
     handleToggle(value) {
         const {tasks} = this.state;
         const found = tasks.find(element => element.description === value.description);
+        found.done = !value.done;
         this.setState({tasks: tasks});
     }
 
@@ -60,9 +61,13 @@ class TaskList extends React.Component {
         }
 
         return (
+            // <div>
+            //     <ul>{tasks.map(this.renderRow)}</ul>
+            // </div>
             <List className={classes.root}>
                 {tasks.map((value, index) => {
                     const labelId = `checkbox-list-label-${index}`;
+
                     return (
                         <ListItem key={index} role={undefined} dense button onClick={()=>this.handleToggle(value)}>
                             <ListItemIcon>
@@ -77,7 +82,7 @@ class TaskList extends React.Component {
                             <ListItemText id={labelId} primary={value.description} />
                             <ListItemSecondaryAction>
                                 <IconButton edge="end" aria-label="comments">
-                                    <CommentIcon />
+                                    <DeleteIcon />
                                 </IconButton>
                             </ListItemSecondaryAction>
                         </ListItem>
