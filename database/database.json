@@ -3,20 +3,20 @@
     "renatomouragmailcom": {
       "name": "Renato Moura",
       "url": "https://github.com/ramoura",
-      "taskList": [
-        {
+      "taskList": {
+        "-1a": {
           "description": "Tarefa 1",
           "done": false
         },
-        {
+        "-2b": {
           "description": "Tarefa 2",
           "done": false
         },
-        {
+        "-3c": {
           "description": "Tarefa 3",
           "done": true
         }
-      ]
+      }
     }
   }
 }

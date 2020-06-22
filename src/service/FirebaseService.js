@@ -13,19 +13,21 @@ export default class FirebaseService {
             .then(value => callBack(null, value))
             .catch( error => callBack(error));
     };
+
     static registerDBRealTime = (nodePath, callback, size = 10) => {
         if(!this.isAuthenticated()){ return console.log("Usuário não logado")}
         let query = this.makeQuery(nodePath, size);
         query.on('value', dataSnapshot => {
-            callback(dataSnapshot.val());
-        });
-    };
+            let tasks = []
+            dataSnapshot.child("taskList").forEach(task => {
+                tasks.push({...task.val(), key: task.key});
+            })
 
-    static getDataInDB = (nodePath, callback, size = 10) => {
-        if(!this.isAuthenticated()){ return console.log("Usuário não logado")}
-        let query = this.makeQuery(nodePath, size);
-        query.once('value').then(dataSnapshot => {
-            callback(dataSnapshot.val());
+            let data = dataSnapshot.val();
+            data['taskList'] = tasks;
+            console.log(data)
+
+            callback(data);
         });
     };
 
@@ -35,4 +37,20 @@ export default class FirebaseService {
             .limitToLast(size);
         return query;
     }
+
+    static removeTask = (id) => {
+        let email = firebaseAuth.currentUser.email.replace(/[^a-zA-Z0-9 ]/g, "");
+        return firebaseDatabase.ref(`users/${email}/taskList/${id}`).remove();
+    };
+
+    static addNewTask(newTask) {
+        let email = firebaseAuth.currentUser.email.replace(/[^a-zA-Z0-9 ]/g, "");
+        const ref = firebaseDatabase.ref(`users/${email}/taskList`).push();
+        ref.set(newTask);
+    }
+
+    static updateData = (id, obj) => {
+        let email = firebaseAuth.currentUser.email.replace(/[^a-zA-Z0-9 ]/g, "");
+        return firebaseDatabase.ref(`users/${email}/taskList/${id}`).set({...obj});
+    };
 }
